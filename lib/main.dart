@@ -31,10 +31,23 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
+  void resetQuiz() {
+    setState(() {
+      scoreKeeper = [];
+      quizBrain.reset();
+      Navigator.pop(context);
+    });
+  }
+
   void checkAnswer(bool userChosenAnswer) {
     if (quizBrain.isFinished()) {
-      Alert(context: context, title: "RFLUTTER", desc: "this is the end")
-          .show();
+      Alert(
+          context: context,
+          title: "Quizzler says:",
+          desc: "Congratulations! You\'ve completed the quiz.",
+          buttons: [
+            DialogButton(child: Text("Reset"), onPressed: () => resetQuiz())
+          ]).show();
     } else {
       bool correctAnswer = quizBrain.getAnswer();
 
