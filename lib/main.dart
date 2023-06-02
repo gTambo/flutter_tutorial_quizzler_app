@@ -31,27 +31,30 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
-  void resetQuiz() {
-    setState(() {
-      scoreKeeper = [];
-      quizBrain.reset();
-      Navigator.pop(context);
-    });
-  }
+  AlertStyle alertStyle = AlertStyle(
+    isCloseButton: true,
+    isOverlayTapDismiss: true,
+    overlayColor: Colors.yellow,
+  );
 
   void checkAnswer(bool userChosenAnswer) {
-    if (quizBrain.isFinished()) {
-      Alert(
-          context: context,
-          title: "Quizzler says:",
-          desc: "Congratulations! You\'ve completed the quiz.",
-          buttons: [
-            DialogButton(child: Text("Reset"), onPressed: () => resetQuiz())
-          ]).show();
-    } else {
-      bool correctAnswer = quizBrain.getAnswer();
+    bool correctAnswer = quizBrain.getAnswer();
 
-      setState(() {
+    setState(() {
+      if (quizBrain.isFinished()) {
+        Alert(
+            context: context,
+            style: alertStyle,
+            title: "Quizzler says:",
+            desc: "Congratulations! You\'ve completed the quiz.",
+            buttons: [
+              DialogButton(
+                  child: Text("Reset"),
+                  onPressed: () => Navigator.pop(context)),
+            ]).show();
+        scoreKeeper = [];
+        quizBrain.reset();
+      } else {
         if (userChosenAnswer == correctAnswer) {
           scoreKeeper.add(
             Icon(Icons.check, color: Colors.green),
@@ -63,8 +66,8 @@ class _QuizPageState extends State<QuizPage> {
         }
 
         quizBrain.nextQuestion();
-      });
-    }
+      }
+    });
   }
 
   @override
