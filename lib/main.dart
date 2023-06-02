@@ -33,13 +33,17 @@ class _QuizPageState extends State<QuizPage> {
   void checkAnswer(bool userChosenAnswer) {
     bool correctAnswer = quizBrain.getAnswer();
 
-    if (correctAnswer == correctAnswer) {
-      print('user got it right');
-    } else {
-      print('user got it wrong');
-    }
-
     setState(() {
+      if (userChosenAnswer == correctAnswer) {
+        scoreKeeper.add(
+          Icon(Icons.check, color: Colors.green),
+        );
+      } else {
+        scoreKeeper.add(
+          Icon(Icons.close, color: Colors.red),
+        );
+      }
+
       quizBrain.nextQuestion();
     });
   }
